@@ -11,7 +11,7 @@ export const countKeywords = (
   issueWords.forEach(word => {
     parameters.forEach(obj => {
       obj.keywords.forEach(keyword => {
-          // TODO adjust (word === keyword) to be less picky (similar word library, regex, toLower)
+        // TODO adjust (word === keyword) to be less picky (similar word library, regex, toLower)
         if(word === keyword) {
           if(areaMap.has(obj.area)) {
             newValue = areaMap.get(obj.area)+1
