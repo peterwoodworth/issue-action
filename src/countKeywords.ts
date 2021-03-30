@@ -4,7 +4,8 @@ export const countKeywords = (
 ): string => {
 
   let issueWords = content.split(" ");
-  let areaMap = new Map()
+  let areaMap = new Map();
+  let newValue: number
 
   // Count keywords in each area by looking at each word in content and counting it to an area if it is a keyword of that area
   issueWords.forEach(word => {
@@ -12,7 +13,12 @@ export const countKeywords = (
       obj.keywords.forEach(keyword => {
           // TODO adjust (word === keyword) to be less picky (similar word library, regex, toLower)
         if(word === keyword) {
-          areaMap.has(obj.area) ? areaMap[obj.area]++ : areaMap.set(obj.area, 1)  
+          if(areaMap.has(obj.area)) {
+            newValue = areaMap.get(obj.area)+1
+            areaMap.set(obj.area, newValue);
+          } else {
+            areaMap.set(obj.area, 1);
+          }
         }    
       })
     })
