@@ -1,4 +1,6 @@
 import * as github from "@actions/github";
+import * as core from '@actions/core'
+import { countReset } from "console";
 import { IParameter } from './issue'
 
 export interface IRepo {
@@ -16,7 +18,9 @@ export class GithubApi {
   constructor(token: string) {
     this.octokit = new github.GitHub(token)
     this.repo = this.getRepo()
-    this.getIssueNumber() ? this.issueNumber = this.getIssueNumber() : this.issueNumber = this.getPrNumber()
+    if(github.context.payload.issue) this.issueNumber = github.context.payload.issue.number
+      else if (github.context.payload.pull_request) this.issueNumber = github.context.payload.pull_request.number
+      else core.setFailed(`Error retrieving issue number`)
   }
 
   public async setIssueAssignees(parameters: IParameter[], winningArea: string) {
@@ -65,22 +69,6 @@ export class GithubApi {
   
     content.push(data.title, data.body)
     return content;
-  };
-
-  private getPrNumber(): number | undefined {
-    const pullRequest = github.context.payload.pull_request;
-    if (!pullRequest) {
-      return undefined;
-    }
-    return pullRequest.number;
-  };
-
-  private getIssueNumber(): number | undefined {
-    const issue = github.context.payload.issue;
-    if (!issue) {
-      return undefined;
-    }
-    return issue.number;
   };
   
   private getRepo(): IRepo {
