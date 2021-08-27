@@ -16,7 +16,7 @@ export class GithubApi {
   constructor(token: string) {
     this.octokit = new github.GitHub(token)
     this.repo = this.getRepo()
-    this.getIssueNumber() ? this.issueNumber = this.getIssueNumber() : this.getPrNumber()
+    this.getIssueNumber() ? this.issueNumber = this.getIssueNumber() : this.issueNumber = this.getPrNumber()
   }
 
   public async setIssueAssignees(parameters: IParameter[], winningArea: string) {
@@ -56,16 +56,7 @@ export class GithubApi {
   }
 
   public async getIssueContent(): Promise<string[]> { 
-    let issue_number;
     let content: string[] = []
-  
-    if (this.getIssueNumber() !== undefined) {
-      issue_number = this.getIssueNumber();
-    } else if (this.getPrNumber() !== undefined) {
-      issue_number = this.getPrNumber();
-    } else {
-      throw new Error("No Issue Provided");
-    }
   
     const { data } = await this.octokit.issues.get({
       ...this.getRepo(),
