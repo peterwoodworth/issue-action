@@ -11,7 +11,6 @@ async function run() {
     const github: GithubApi = new GithubApi(token);
     const content: string[] = await github.getIssueContent();
     const issue: Issue = new Issue(content);
-
     const winningArea: string = issue.determineArea();
 
     if (winningArea === '') console.log("Keywords not included in this issue");
