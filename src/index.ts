@@ -14,15 +14,12 @@ async function run() {
     const issue = new Issue(content);
 
     const winningArea = issue.determineArea(input.parameters, input.similarity, input.bodyValue);
-
-    if (winningArea === '') {
-      console.log("Keywords not included in this issue");
-      return;
-    } else {
+    
+    if (winningArea === '') console.log("Keywords not included in this issue");
+    else {
+      github.setIssueAssignees(input.parameters, winningArea);
       github.setIssueLabels(input.parameters, winningArea);
       core.setOutput("labeled", true.toString());
-  
-      github.setIssueAssignees(input.parameters, winningArea);
       core.setOutput("assigned", true.toString());
     }
   } catch (error) {
