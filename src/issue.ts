@@ -18,12 +18,11 @@ export class Issue {
         });
     }
 
-    public determineArea(parameters: IParameter[], similarity: number): string {
+    public determineArea(parameters: IParameter[], similarity: number, bodyValue: number): string {
         let titleIssueWords = this.title.split(/ |\./);
         let bodyIssueWords = this.body.split(/ |\./)
         let titleValue: number = 1
         let x: number = 1;
-        let bodyValue: number = .05
         let potentialAreas: Map<string, number> = new Map()
       
         // For each word in the title, check if it matches any keywords. If it does, add decreasing score based on inverse function to the area keyword is in.
@@ -54,7 +53,7 @@ export class Issue {
         }
         // tiebreaker goes to the area with more *exact* keyword matches
         if(winners.size > 1 && similarity !== 0) {
-          winningArea = this.determineArea(parameters, 0);
+          winningArea = this.determineArea(parameters, 0, bodyValue);
         } else if (winners.size > 0) {
           winningArea = winners.keys().next().value;
         } 

@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import { Issue } from './issue';
 import { GithubApi } from './github';
-import { Input, IParameter } from './input';
+import { Input } from './input';
 
 async function run() {
   try {
@@ -12,9 +12,8 @@ async function run() {
     const github: GithubApi = new GithubApi(input.token);
     const content: string[] = await github.getIssueContent();
     const issue = new Issue(content);
-    const similarity: number = .125
 
-    const winningArea = issue.determineArea(input.parameters, similarity);
+    const winningArea = issue.determineArea(input.parameters, input.similarity, input.bodyValue);
 
     if (winningArea === '') {
       console.log("Keywords not included in this issue");

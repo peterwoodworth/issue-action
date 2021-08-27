@@ -12,7 +12,9 @@ export class Input {
 
     public parameters: IParameter[]
 
-    public similarity?: number
+    public similarity: number
+
+    public bodyValue: number
 
     constructor() {
         this.token = core.getInput("github-token");
@@ -22,5 +24,7 @@ export class Input {
         );
 
         this.similarity = +core.getInput("similarity", {required: false})
+
+        this.bodyValue = +core.getInput("body-value", {required: false})
     }
 }
