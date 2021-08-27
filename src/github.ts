@@ -1,6 +1,6 @@
 import * as github from "@actions/github";
 import * as core from '@actions/core'
-import { IParameter } from './input'
+import { IParameter } from './issue'
 
 export interface IRepo {
   owner: string;

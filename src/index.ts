@@ -13,12 +13,12 @@ async function run() {
     const content: string[] = await github.getIssueContent();
     const issue: Issue = new Issue(content);
 
-    const winningArea: string = issue.determineArea(input.parameters, input.similarity, input.bodyValue);
+    const winningArea: string = issue.determineArea();
 
     if (winningArea === '') console.log("Keywords not included in this issue");
     else {
-      github.setIssueAssignees(input.parameters, winningArea);
-      github.setIssueLabels(input.parameters, winningArea);
+      github.setIssueAssignees(issue.parameters, winningArea);
+      github.setIssueLabels(issue.parameters, winningArea);
       core.setOutput("labeled", true.toString());
       core.setOutput("assigned", true.toString());
     }
