@@ -9,9 +9,7 @@ export interface IRepo {
 
 export class GithubApi {
   private octokit;
-
   private repo: IRepo
-
   private issueNumber: number | undefined
 
   constructor(token: string) {
