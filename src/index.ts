@@ -8,13 +8,13 @@ async function run() {
     core.setOutput("labeled", false.toString());
     core.setOutput("assigned", false.toString());
 
-    const input = new Input()
+    const input: Input = new Input()
     const github: GithubApi = new GithubApi(input.token);
     const content: string[] = await github.getIssueContent();
-    const issue = new Issue(content);
+    const issue: Issue = new Issue(content);
 
-    const winningArea = issue.determineArea(input.parameters, input.similarity, input.bodyValue);
-    
+    const winningArea: string = issue.determineArea(input.parameters, input.similarity, input.bodyValue);
+
     if (winningArea === '') console.log("Keywords not included in this issue");
     else {
       github.setIssueAssignees(input.parameters, winningArea);
