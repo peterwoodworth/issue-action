@@ -31,7 +31,7 @@ export class GithubApi {
     })
     
     await this.octokit.issues.addAssignees({
-      ...this.getRepo(),
+      ...this.repo,
       issue_number: this.issueNumber,
       assignees
     });
@@ -49,7 +49,7 @@ export class GithubApi {
     })
     
     await this.octokit.issues.addLabels({
-      ...this.getRepo(),
+      ...this.repo,
       issue_number: this.issueNumber,
       labels
     });
@@ -59,7 +59,7 @@ export class GithubApi {
     let content: string[] = []
   
     const { data } = await this.octokit.issues.get({
-      ...this.getRepo(),
+      ...this.repo,
       issue_number: this.issueNumber,
     });
   
