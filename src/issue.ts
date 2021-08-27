@@ -35,8 +35,8 @@ export class Issue {
         // For each word in the title, check if it matches any keywords. If it does, add decreasing score based on inverse function to the area keyword is in.
         titleIssueWords.forEach(content => {
           potentialAreas = this.scoreArea(content, parameters, potentialAreas, titleValue, similarity);
+          ++x
           titleValue = (2/(1+x))
-          x++
         })
       
         // Add static value to area keyword is in if keyword is found in body
