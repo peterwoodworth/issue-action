@@ -10,6 +10,9 @@ inputs:
   excluded-expressions:
     description: "Words to exclude from search"
     required: true
+  similarity:
+    description: "Determines how similar two words can be for similarity to be detected"
+    required: false
 
 outputs:
   title:

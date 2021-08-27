@@ -1,12 +1,6 @@
 import * as core from "@actions/core";
 import levenshtein from 'js-levenshtein';
-
-export interface IParameter {
-    area: string;
-    keywords: string[];
-    labels: string[];
-    assignees: string[];
-}
+import { IParameter } from './input'
 
 export class Issue {
     public title: string;

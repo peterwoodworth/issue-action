@@ -1,7 +1,6 @@
 import * as github from "@actions/github";
 import * as core from '@actions/core'
-import { countReset } from "console";
-import { IParameter } from './issue'
+import { IParameter } from './input'
 
 export interface IRepo {
   owner: string;
@@ -17,7 +16,7 @@ export class GithubApi {
 
   constructor(token: string) {
     this.octokit = new github.GitHub(token)
-    this.repo = this.getRepo()
+    this.repo = github.context.repo
     if(github.context.payload.issue) this.issueNumber = github.context.payload.issue.number
       else if (github.context.payload.pull_request) this.issueNumber = github.context.payload.pull_request.number
       else core.setFailed(`Error retrieving issue number`)
@@ -69,10 +68,5 @@ export class GithubApi {
   
     content.push(data.title, data.body)
     return content;
-  };
-  
-  private getRepo(): IRepo {
-    const repo: IRepo = github.context.repo;
-    return repo;
   };
 }
