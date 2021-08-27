@@ -73,13 +73,13 @@ export class Issue {
     return winningArea;
   }
 
-  private scoreArea(content: string, potentialAreas: Map<string, number>, reducedValue): Map<string, number> {
+  private scoreArea(content: string, potentialAreas: Map<string, number>, value): Map<string, number> {
     this.parameters.forEach(obj => {
       obj.keywords.forEach(keyword => {
         if(this.similarStrings(content, keyword)) {
           potentialAreas.has(obj.area) ?
-            potentialAreas.set(obj.area, potentialAreas.get(obj.area)+reducedValue) :
-            potentialAreas.set(obj.area, reducedValue);
+            potentialAreas.set(obj.area, potentialAreas.get(obj.area)+value) :
+            potentialAreas.set(obj.area, value);
         }    
       })
     })    

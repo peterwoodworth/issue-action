@@ -1,15 +1,14 @@
 import * as core from "@actions/core";
 import { Issue } from './issue';
 import { GithubApi } from './github';
-import { Input } from './input';
 
 async function run() {
   try {
     core.setOutput("labeled", false.toString());
     core.setOutput("assigned", false.toString());
 
-    const input: Input = new Input()
-    const github: GithubApi = new GithubApi(input.token);
+    const token = core.getInput('github-token');
+    const github: GithubApi = new GithubApi(token);
     const content: string[] = await github.getIssueContent();
     const issue: Issue = new Issue(content);
 
