@@ -1,19 +1,17 @@
 import * as core from "@actions/core";
-import { getIssueContent } from "./getIssueContent";
-import { countKeywords } from "./countKeywords";
-import { setIssueLabel } from "./setIssueLabel";
-import { setIssueAssignee } from "./setIssueAssignee";
+import { Issue, IParameter } from './issue';
+import { GithubApi } from './github';
 
 async function run() {
   try {
     core.setOutput("labeled", false.toString());
     core.setOutput("assigned", false.toString());
     const token = core.getInput("github-token");
-    const content: string[] = await getIssueContent(token);
-    let titleContent: string = content[0], bodyContent: string = content[1]
-    const similarity: number = .125
-    const excluded: string[] = core.getInput("excluded-expressions", {required: false}).replace(/\[|\]/gi, '').split('|');
-    const parameters: { area: string, keywords: string[], labels: string[], assignees: string[] }[] = JSON.parse(
+    const github: GithubApi = new GithubApi(token);
+    const content: string[] = await github.getIssueContent();
+    const issue = new Issue(content);
+    const similarity: number = .125 // Change this to be user input
+    const parameters: IParameter[] = JSON.parse(
       core.getInput("parameters", {required: true})
     );
     if (!parameters) {
@@ -23,21 +21,16 @@ async function run() {
       );
     }
 
-    excluded.forEach(ex => {
-      titleContent.replace(ex, '');
-      bodyContent.replace(ex, '')
-    });
-
-    const winningArea = countKeywords(parameters, titleContent, bodyContent, similarity);
+    const winningArea = issue.determineArea(parameters, similarity);
 
     if (winningArea === '') {
       console.log("Keywords not included in this issue");
       return;
     } else {
-      setIssueLabel(token, winningArea, parameters);
+      github.setIssueLabels(parameters, winningArea);
       core.setOutput("labeled", true.toString());
   
-      setIssueAssignee(token, winningArea, parameters);
+      github.setIssueAssignees(parameters, winningArea);
       core.setOutput("assigned", true.toString());
     }
   } catch (error) {
