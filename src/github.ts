@@ -9,28 +9,23 @@ export interface IRepo {
 
 export class GithubApi {
   private octokit;
-  private repo: IRepo
-  private issueNumber: number | undefined
+  private repo: IRepo;
+  private issueNumber: number | undefined;
 
   constructor(token: string) {
-    this.octokit = new github.GitHub(token)
-    this.repo = github.context.repo
-    if(github.context.payload.issue) this.issueNumber = github.context.payload.issue.number
-      else if (github.context.payload.pull_request) this.issueNumber = github.context.payload.pull_request.number
-      else core.setFailed(`Error retrieving issue number`)
+    this.octokit = new github.GitHub(token);
+    this.repo = github.context.repo;
+
+    if(github.context.payload.issue) { 
+      this.issueNumber = github.context.payload.issue.number;
+    } else if (github.context.payload.pull_request) { 
+      this.issueNumber = github.context.payload.pull_request.number;
+    } else {
+      core.setFailed(`Error retrieving issue number`);
+    }
   }
 
-  public async setIssueAssignees(parameters: IParameter[], winningArea: string) {
-    let assignees: string[] = [];
-
-    parameters.forEach(obj => {
-      if(winningArea == obj.area) {
-        obj.assignees.forEach(assignee => {
-          assignees.push(assignee);
-        })
-      }
-    })
-    
+  public async setIssueAssignees(assignees: string[]) {
     await this.octokit.issues.addAssignees({
       ...this.repo,
       issue_number: this.issueNumber,
@@ -38,17 +33,7 @@ export class GithubApi {
     });
   }
 
-  public async setIssueLabels(parameters: IParameter[], winningArea: string) {
-    let labels: string[] = [];
-
-    parameters.forEach(obj => {
-      if(winningArea == obj.area) {
-        obj.labels.forEach(label => {
-          labels.push(label);
-        })
-      }
-    })
-    
+  public async setIssueLabels(labels: string[]) {
     await this.octokit.issues.addLabels({
       ...this.repo,
       issue_number: this.issueNumber,
@@ -57,14 +42,14 @@ export class GithubApi {
   }
 
   public async getIssueContent(): Promise<string[]> { 
-    let content: string[] = []
+    let content: string[] = [];
   
     const { data } = await this.octokit.issues.get({
       ...this.repo,
       issue_number: this.issueNumber,
     });
   
-    content.push(data.title, data.body)
+    content.push(data.title, data.body);
     return content;
   };
 }

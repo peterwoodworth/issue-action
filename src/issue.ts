@@ -11,9 +11,9 @@ export interface IParameter {
 export class Issue {
   private title: string;
   private body: string;
-  public parameters: IParameter[]
-  private similarity: number
-  private bodyValue: number
+  public parameters: IParameter[];
+  private similarity: number;
+  private bodyValue: number;
 
   constructor(content: string[]) {
     this.title = content[0];
@@ -21,33 +21,36 @@ export class Issue {
     const excluded: string[] = core.getInput("excluded-expressions", {required: false}).replace(/\[|\]/gi, '').split('|');
     excluded.forEach(ex => {
       this.title.replace(ex, '');
-      this.body.replace(ex, '')
+      this.body.replace(ex, '');
     });
     this.parameters = JSON.parse(core.getInput("parameters", {required: true}));
-    this.similarity = +core.getInput("similarity", {required: false})
-    this.bodyValue = +core.getInput("body-value", {required: false})
+    this.similarity = +core.getInput("similarity", {required: false});
+    this.bodyValue = +core.getInput("body-value", {required: false});
   }
 
   public determineArea(): string {
     let titleIssueWords = this.title.split(/ |\./);
     let bodyIssueWords = this.body.split(/ |\./)
-    let titleValue: number = 1
+    let titleValue: number = 1;
     let x: number = 1;
-    let potentialAreas: Map<string, number> = new Map()
+    let potentialAreas: Map<string, number> = new Map();
+    const weightedTitle: (n: number) => number = (n: number) => {
+      return (2/(1+n));
+    }
       
     // For each word in the title, check if it matches any keywords. If it does, add decreasing score based on inverse function to the area keyword is in.
     titleIssueWords.forEach(content => {
       potentialAreas = this.scoreArea(content, potentialAreas, titleValue);
-      ++x
-      titleValue = (2/(1+x))
-    })
+      ++x;
+      titleValue = weightedTitle(x);
+    });
       
     // Add static value to area keyword is in if keyword is found in body
     bodyIssueWords.forEach(content => {
       potentialAreas = this.scoreArea(content, potentialAreas, this.bodyValue);
-    })
+    });
       
-    console.log(...potentialAreas)
+    console.log(...potentialAreas);
 
     let winningArea = '';
     let winners: Map<string,number> = new Map();
@@ -73,6 +76,23 @@ export class Issue {
     return winningArea;
   }
 
+  public getWinningAreaData(winningArea: string): IParameter {
+    let winningAreaData: IParameter = {
+      area: '',
+      keywords: [],
+      labels: [],
+      assignees: [],
+    }
+
+    for(let obj of this.parameters) {
+      if(winningArea === obj.area) {
+        winningAreaData = obj;
+      }
+    }
+
+    return winningAreaData;
+  }
+
   private scoreArea(content: string, potentialAreas: Map<string, number>, value): Map<string, number> {
     this.parameters.forEach(obj => {
       obj.keywords.forEach(keyword => {
@@ -86,6 +106,10 @@ export class Issue {
     return potentialAreas;
   }
 
+  private isSimilar(str1: string, str2: string): number {
+    return (((str1.length + str2.length) / 2) * this.similarity);
+  }
+
   private similarStrings(str1: string, str2: string): boolean {
     str1 = str1.toLowerCase();
     str2 = str2.toLowerCase();
@@ -97,7 +121,7 @@ export class Issue {
     // levenshtein returns a value between 0 and the length of the strings being compared. This
     // represents the number of character differences between compared strings. We compare this
     // with a set percentage of the average length of said strings
-    if(levenshtein(str1, str2) <= ((str1.length + str2.length) / 2) * this.similarity)
+    if(levenshtein(str1, str2) <= this.isSimilar(str1, str2))
       return true;
     else
       return false;

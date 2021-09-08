@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { Issue } from './issue';
+import { IParameter, Issue } from './issue';
 import { GithubApi } from './github';
 
 async function run() {
@@ -11,12 +11,13 @@ async function run() {
     const github: GithubApi = new GithubApi(token);
     const content: string[] = await github.getIssueContent();
     const issue: Issue = new Issue(content);
-    const winningArea: string = issue.determineArea();
+    const winningAreaData: IParameter = issue.getWinningAreaData(issue.determineArea())
 
-    if (winningArea === '') console.log("Keywords not included in this issue");
-    else {
-      github.setIssueAssignees(issue.parameters, winningArea);
-      github.setIssueLabels(issue.parameters, winningArea);
+    if (winningAreaData.area === '') { 
+      console.log("Keywords not included in this issue");
+    } else {
+      github.setIssueAssignees(winningAreaData.assignees);
+      github.setIssueLabels(winningAreaData.labels);
       core.setOutput("labeled", true.toString());
       core.setOutput("assigned", true.toString());
     }
