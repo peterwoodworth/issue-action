@@ -17,9 +17,9 @@ The value of words in the body of the issue are worth a constant value which can
 
 Keywords don't have to be an _exact_ match for the word to count. You can allow for slight amount of user error by tuning the `similarity` input. A value of 0 means that keywords have to be an exact match
 
-### Inputs
+## Inputs
 
-#### parameters
+### parameters
 Parameters should take the form 
 ```json
 [
@@ -32,18 +32,20 @@ Parameters should take the form
 ]
 ```
 
-#### excluded expressions
+### excluded expressions
 
 You can exclude certain expressions from being potentially counted as keywords. This is useful if you have issue templates which may contain keywords.
 The input should be an array with expressions to exclude separated by bars. Ex. `[ Expression 1 | Expression 2 ]`
 
-#### similarity
+### similarity
 A value of 0 means keywords have to match exactly. The algorithm used to determine the similarity of two strings is [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
-The default value is .125
 
-#### body-value
+The default value is **.125**
+
+### body-value
 A set constant for how much each keyword detected in the body of the issue is worth
-The default value is .025
+
+The default value is **.025**
 
 ## Example
 
