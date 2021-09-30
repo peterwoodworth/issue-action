@@ -1,16 +1,21 @@
 import * as github from "@actions/github";
 import * as core from '@actions/core'
-import { IParameter } from './issue'
 
 export interface IRepo {
   owner: string;
   repo: string;
 }
 
+export enum IssueType {
+  PULL_REQUEST = 'pull_request',
+  ISSUE = 'issue',
+}
+
 export class GithubApi {
   private octokit;
   private repo: IRepo;
   private issueNumber: number | undefined;
+  private issueType: IssueType | undefined;
 
   constructor(token: string) {
     this.octokit = new github.GitHub(token);
@@ -18,8 +23,10 @@ export class GithubApi {
 
     if(github.context.payload.issue) { 
       this.issueNumber = github.context.payload.issue.number;
+      this.issueType = IssueType.ISSUE;
     } else if (github.context.payload.pull_request) { 
       this.issueNumber = github.context.payload.pull_request.number;
+      this.issueType = IssueType.PULL_REQUEST;
     } else {
       core.setFailed(`Error retrieving issue number`);
     }

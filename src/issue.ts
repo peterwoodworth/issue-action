@@ -127,6 +127,10 @@ export class Issue {
   private similarStrings(str1: string, str2: string): boolean {
     str1 = str1.toLowerCase();
     str2 = str2.toLowerCase();
+
+    // Regex for removing parentheses and replacing with space
+    str1 = str1.replace(/ |\(|\)|\./gi, ' ');
+    str2 = str2.replace(/ |\(|\)|\./gi, ' ');
         
     // Regex for removing punctuation and replacing with empty string
     str1 = str1.replace(/ |_|-|\(|\)|:|\[|\]|	|\./gi, '');
