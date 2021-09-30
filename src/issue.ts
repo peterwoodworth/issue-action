@@ -129,8 +129,8 @@ export class Issue {
     str2 = str2.toLowerCase();
         
     // Regex for removing punctuation and replacing with empty string
-    str1 = str1.replace(/ |_|-|\(|\)|:|\[|\]|	|\./gi, '');
-    str2 = str2.replace(/ |_|-|\(|\)|:|\[|\]|	|\./gi, '');
+    str1 = str1.replace(/ |_|-|\(|\)|:|\`|\[|\]|	|\./gi, '');
+    str2 = str2.replace(/ |_|-|\(|\)|:|\`|\[|\]|	|\./gi, '');
       
     // levenshtein returns a value between 0 and the length of the strings being compared. This
     // represents the number of character differences between compared strings. We compare this
