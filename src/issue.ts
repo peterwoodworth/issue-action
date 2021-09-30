@@ -61,7 +61,7 @@ export class Issue {
       });
     }
       
-    console.log("Area scores: ", ...potentialAreas);
+    //console.log("Area scores: ", ...potentialAreas);
 
     let winningArea = '';
     let winners: Map<string,number> = new Map();
@@ -85,7 +85,7 @@ export class Issue {
       
     winningArea = winners.keys().next().value;
 
-    console.log("Winning area: " + winningArea);
+    //console.log("Winning area: " + winningArea);
       
     return winningArea;
   }
