@@ -1,6 +1,6 @@
 # Deprecated
 
-[aws-issue-triage-manager](https://github.com/aws-github-ops/aws-issue-triage-manager) is actively maintained (by me) and has more features than present on this action
+[aws-issue-triage-manager](https://github.com/aws-github-ops/aws-issue-triage-manager) is actively maintained and has more features than present on this action
 
 # Issue Action
 
