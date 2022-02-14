@@ -1,3 +1,7 @@
+# Deprecated
+
+[aws-issue-triage-manager](https://github.com/aws-github-ops/aws-issue-triage-manager) is actively maintained (by me) and has more features than present on this action
+
 # Issue Action
 
 Github action for automatically adding labels and/or setting assignees when an Issue or PR is opened or edited based on user-defined _Area_
